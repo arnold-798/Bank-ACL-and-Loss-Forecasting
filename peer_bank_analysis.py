@@ -41,15 +41,21 @@ import matplotlib.pyplot as plt
 
 # Using @st.cache tells streamlit to check three things: 1.bytecode that makes up the function, 2. code, variables and files that function depends on, 3. input parameters
 
+streamlit_app_path = 'https://github.com/arnold-798/Bank-ACL-and-Loss-Forecasting/blob/main/SNL_Peer_Bank_042021.csv'
+
 @st.cache
 def load_peer_data(nrows):
-    data = pd.read_csv('/Users/chrisarnold/Desktop/Big_Data_Econometrics/PyEnvs/peer_bank/SNL_Peer_Bank_042021.csv', sep = ',', nrows=nrows)
+    data_path = os.path.join(streamlit_app_path, 'SNL_Peer_Bank_042021.csv')
+    data_path = data_path.replace('\\', '/'')
+    data = pd.read_csv(data_path, sep = ',', nrows=nrows)
     data = pd.DataFrame(data)
     return data
 
 @st.cache
 def load_fredqd(nrows):
-    data = pd.read_csv('/Users/chrisarnold/Desktop/Big_Data_Econometrics/PyEnvs/peer_bank/fred_qd_042021.csv', sep = ',', skiprows=[i for i in range(1,131)], nrows=nrows) 
+    dat_path = os.path.join(streamlit_app_path, 'fred_qd_042021.csv') 
+    data_path = data_path.replace('\\', '/'')
+    data = pd.read_csv(data_path, sep = ',', skiprows=[i for i in range(1,131)], nrows=nrows) 
     data = pd.DataFrame(data)
     return data
 

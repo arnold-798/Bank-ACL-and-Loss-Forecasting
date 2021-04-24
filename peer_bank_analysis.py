@@ -34,31 +34,93 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import os
+from PIL import Image
+import cv2 
 
 import matplotlib.pyplot as plt
+
+#%% Create a selection box
+
+def welcome():
+    
+    st.title('Image Processing using Streamlit')
+    
+    st.subheader('A simple app that shows different image processing algorithms. You can choose the options'
+             + ' from the left. I have implemented only a few to show how it works on Streamlit. ' + 
+             'You are free to add stuff to this app.')
+    
+    st.image('hackershrine.jpg',use_column_width=True)
 
 
 #%% Pull in the data from peer banks and macro data from fred qd #https://files.stlouisfed.org/files/htdocs/fred-md/quarterly/current.csv
 
 # Using @st.cache tells streamlit to check three things: 1.bytecode that makes up the function, 2. code, variables and files that function depends on, 3. input parameters
 
-streamlit_app_path = 'https://github.com/arnold-798/Bank-ACL-and-Loss-Forecasting/blob/main/'
+streamlit_app_path = 'https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/'
+
+data_test = pd.read_csv(os.path.join(streamlit_app_path, 'SNL_Peer_Bank_042021.csv'))
 
 @st.cache
 def load_peer_data(nrows):
     data_path = os.path.join(streamlit_app_path, 'SNL_Peer_Bank_042021.csv')
     data_path = data_path.replace('\\', '/')
-    data = pd.read_csv(data_path, sep = ',', nrows=nrows)
-    data = pd.DataFrame(data)
+    data = pd.read_csv(data_path, sep = ',', nrows=nrows, error_bad_lines=False)
     return data
 
 @st.cache
 def load_fredqd(nrows):
     data_path = os.path.join(streamlit_app_path, 'fred_qd_042021.csv') 
     data_path = data_path.replace('\\', '/')
-    data = pd.read_csv(data_path, sep = ',', skiprows=[i for i in range(1,131)], nrows=nrows) 
-    data = pd.DataFrame(data)
+    data = pd.read_csv(data_path, sep = ',', skiprows=[i for i in range(1,131)], nrows=nrows, error_bad_lines=False) 
     return data
+
+
+#%% Tutorials
+
+def tutorial():
+    st.header("Thresholding, Edge Detection and Contours")
+    
+    if st.button('See Original Image of Tom'):
+        
+        original = Image.open('tom.jpg')
+        st.image(original, use_column_width=True)
+        
+    image = cv2.imread('tom.jpg')
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
+    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
+    thresh1 = thresh1.astype(np.float64)
+    st.image(thresh1, use_column_width=True,clamp = True)
+    
+    st.text("Bar Chart of the image")
+    histr = cv2.calcHist([image],[0],None,[256],[0,256])
+    st.bar_chart(histr)
+    
+    st.text("Press the button below to view Canny Edge Detection Technique") 
+    if st.button('Canny Edge Detector'): 
+        image = load_image("jerry.jpg")
+        edges = cv2.Canny(image,50,300)
+        cv2.imwrite('edges.jpg',edges)
+        st.image(edges,use_column_width=True,clamp=True)
+      
+    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
+    
+    if st.button('Contours'):
+        im = load_image("jerry1.jpg")
+          
+        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray,y,255,0)
+        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        
+        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
+ 
+        
+        st.image(thresh, use_column_width=True, clamp = True)
+        st.image(img, use_column_width=True, clamp = True)
+
+#%% Load data to play around with
+
 
 fred_qd_raw = load_fredqd(120)
 peer_bank_raw = load_peer_data(2400)
@@ -72,6 +134,48 @@ st.subheader("Quarterly Macroeconomic Data")
 st.write(fred_qd_raw)
 
 #%% Explore the data
+
+def data():
+    st.header("Thresholding, Edge Detection and Contours")
+    
+    if st.button('See Original Image of Tom'):
+        
+        original = Image.open('tom.jpg')
+        st.image(original, use_column_width=True)
+        
+    image = cv2.imread('tom.jpg')
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
+    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
+    thresh1 = thresh1.astype(np.float64)
+    st.image(thresh1, use_column_width=True,clamp = True)
+    
+    st.text("Bar Chart of the image")
+    histr = cv2.calcHist([image],[0],None,[256],[0,256])
+    st.bar_chart(histr)
+    
+    st.text("Press the button below to view Canny Edge Detection Technique") 
+    if st.button('Canny Edge Detector'): 
+        image = load_image("jerry.jpg")
+        edges = cv2.Canny(image,50,300)
+        cv2.imwrite('edges.jpg',edges)
+        st.image(edges,use_column_width=True,clamp=True)
+      
+    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
+    
+    if st.button('Contours'):
+        im = load_image("jerry1.jpg")
+          
+        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray,y,255,0)
+        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        
+        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
+ 
+        
+        st.image(thresh, use_column_width=True, clamp = True)
+        st.image(img, use_column_width=True, clamp = True)
 
 
 st.header("Exploration of Banks Panel Data")
@@ -188,6 +292,48 @@ st.bar_chart(acl_cov_rate_20Q4.groupby('BANK_NAME_ABBR').agg('mean')[['Total_ACL
 
 
 #%% In-Depth Visuals on the Data
+
+def visuals():
+    st.header("Thresholding, Edge Detection and Contours")
+    
+    if st.button('See Original Image of Tom'):
+        
+        original = Image.open('tom.jpg')
+        st.image(original, use_column_width=True)
+        
+    image = cv2.imread('tom.jpg')
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
+    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
+    thresh1 = thresh1.astype(np.float64)
+    st.image(thresh1, use_column_width=True,clamp = True)
+    
+    st.text("Bar Chart of the image")
+    histr = cv2.calcHist([image],[0],None,[256],[0,256])
+    st.bar_chart(histr)
+    
+    st.text("Press the button below to view Canny Edge Detection Technique") 
+    if st.button('Canny Edge Detector'): 
+        image = load_image("jerry.jpg")
+        edges = cv2.Canny(image,50,300)
+        cv2.imwrite('edges.jpg',edges)
+        st.image(edges,use_column_width=True,clamp=True)
+      
+    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
+    
+    if st.button('Contours'):
+        im = load_image("jerry1.jpg")
+          
+        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray,y,255,0)
+        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        
+        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
+ 
+        
+        st.image(thresh, use_column_width=True, clamp = True)
+        st.image(img, use_column_width=True, clamp = True)
 
 coverage_rates_states = pd.DataFrame(acl_cov_rate_20Q4[['latitude', 'longitude', 'Total_ACL_Coverage_Rate']])
 
@@ -337,6 +483,51 @@ pnc_macro_data['NCO_RATE_SEG'] = pd.cut(pnc_macro_data['REG_NCO_TO_AVG_LOAN'], b
 pnc_macro_data['NCO_RATE_SEG'].head()
 
 
+def reganalyzer():
+    st.header("Thresholding, Edge Detection and Contours")
+    
+    if st.button('See Original Image of Tom'):
+        
+        original = Image.open('tom.jpg')
+        st.image(original, use_column_width=True)
+        
+    image = cv2.imread('tom.jpg')
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    
+    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
+    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
+    thresh1 = thresh1.astype(np.float64)
+    st.image(thresh1, use_column_width=True,clamp = True)
+    
+    st.text("Bar Chart of the image")
+    histr = cv2.calcHist([image],[0],None,[256],[0,256])
+    st.bar_chart(histr)
+    
+    st.text("Press the button below to view Canny Edge Detection Technique") 
+    if st.button('Canny Edge Detector'): 
+        image = load_image("jerry.jpg")
+        edges = cv2.Canny(image,50,300)
+        cv2.imwrite('edges.jpg',edges)
+        st.image(edges,use_column_width=True,clamp=True)
+      
+    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
+    
+    if st.button('Contours'):
+        im = load_image("jerry1.jpg")
+          
+        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+        ret,thresh = cv2.threshold(imgray,y,255,0)
+        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        
+        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
+ 
+        
+        st.image(thresh, use_column_width=True, clamp = True)
+        st.image(img, use_column_width=True, clamp = True)
+
+
+
+
 #%% Barplot
 
 pnc_macro_data_sort = pd.DataFrame(pnc_macro_data, index=pnc_macro_data['YEAR_QUARTER'])
@@ -429,7 +620,7 @@ _ = tree.plot_tree(rand_forest_1.estimators_[0], feature_names=pnc_macro_train_x
 pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[0], feature_names = pnc_macro_train_x.columns, filled=True)
 
 st.header("Random Forest Classifier - Tree Plot")
-st.pyplot(pnc_train_treeplot)
+#st.pyplot(pnc_train_treeplot)
 
 #%% Build a Simple Linear Regression model
 
@@ -455,3 +646,16 @@ pnc_validation_rfr_yd_pred = rand_forest_reg3.predict_proba(pnc_macro_validation
 
 #%% Create the app with loaded data
 
+
+def main():
+    selected_box = st.sidebar.selectbox('Choose one of the following', 
+                                        ('Welcome','Image Processing', 'Video', 'Face Detection', 'Feature Detection', 'Object Detection'))
+    if selected_box == 'Welcome': 
+        welcome() 
+    if selected_box == 'Quick Walk-Through of the Basics': tutorial()
+    if selected_box == 'Data & Summary Statistics': data()
+    if selected_box == 'Data Visualizations': visuals()
+    if selected_box == 'Regression Analysis': reganalyzer()
+    
+if __name__ == "__main__":
+    main()

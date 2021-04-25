@@ -35,7 +35,6 @@ import pandas as pd
 import seaborn as sns
 import os
 from PIL import Image
-import cv2 
 
 import matplotlib.pyplot as plt
 
@@ -51,6 +50,14 @@ def welcome():
     
     st.image('hackershrine.jpg',use_column_width=True)
 
+
+#%% Set the working directory 
+
+# Users can change this accordingly if they have a specific path they want to use
+
+cwd = os.getcwd()
+
+os.chdir(cwd)
 
 #%% Pull in the data from peer banks and macro data from fred qd #https://files.stlouisfed.org/files/htdocs/fred-md/quarterly/current.csv
 
@@ -85,39 +92,39 @@ def tutorial():
         original = Image.open('tom.jpg')
         st.image(original, use_column_width=True)
         
-    image = cv2.imread('tom.jpg')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    #image = cv2.imread('tom.jpg')
+    #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
     x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
-    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
-    thresh1 = thresh1.astype(np.float64)
-    st.image(thresh1, use_column_width=True,clamp = True)
+    #ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
+    #thresh1 = thresh1.astype(np.float64)
+    #st.image(thresh1, use_column_width=True,clamp = True)
     
-    st.text("Bar Chart of the image")
-    histr = cv2.calcHist([image],[0],None,[256],[0,256])
-    st.bar_chart(histr)
+    #st.text("Bar Chart of the image")
+    #histr = cv2.calcHist([image],[0],None,[256],[0,256])
+    #st.bar_chart(histr)
     
-    st.text("Press the button below to view Canny Edge Detection Technique") 
-    if st.button('Canny Edge Detector'): 
-        image = load_image("jerry.jpg")
-        edges = cv2.Canny(image,50,300)
-        cv2.imwrite('edges.jpg',edges)
-        st.image(edges,use_column_width=True,clamp=True)
-      
-    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
-    
-    if st.button('Contours'):
-        im = load_image("jerry1.jpg")
+    #st.text("Press the button below to view Canny Edge Detection Technique") 
+    #if st.button('Canny Edge Detector'): 
+    #    image = load_image("jerry.jpg")
+    #    edges = cv2.Canny(image,50,300)
+    #    cv2.imwrite('edges.jpg',edges)
+    #    st.image(edges,use_column_width=True,clamp=True)
+    #  
+    #y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
+    #
+    #if st.button('Contours'):
+    #    im = load_image("jerry1.jpg")
           
-        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(imgray,y,255,0)
-        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        
-        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
+    #    imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
+    #    ret,thresh = cv2.threshold(imgray,y,255,0)
+    #    image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    #    
+    #    img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
  
         
-        st.image(thresh, use_column_width=True, clamp = True)
-        st.image(img, use_column_width=True, clamp = True)
+    #    st.image(thresh, use_column_width=True, clamp = True)
+    #    st.image(img, use_column_width=True, clamp = True)
 
 #%% Load data to play around with
 
@@ -138,46 +145,7 @@ st.write(fred_qd_raw)
 def data():
     st.header("Thresholding, Edge Detection and Contours")
     
-    if st.button('See Original Image of Tom'):
-        
-        original = Image.open('tom.jpg')
-        st.image(original, use_column_width=True)
-        
-    image = cv2.imread('tom.jpg')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
-    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
-    thresh1 = thresh1.astype(np.float64)
-    st.image(thresh1, use_column_width=True,clamp = True)
-    
-    st.text("Bar Chart of the image")
-    histr = cv2.calcHist([image],[0],None,[256],[0,256])
-    st.bar_chart(histr)
-    
-    st.text("Press the button below to view Canny Edge Detection Technique") 
-    if st.button('Canny Edge Detector'): 
-        image = load_image("jerry.jpg")
-        edges = cv2.Canny(image,50,300)
-        cv2.imwrite('edges.jpg',edges)
-        st.image(edges,use_column_width=True,clamp=True)
-      
-    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
-    
-    if st.button('Contours'):
-        im = load_image("jerry1.jpg")
-          
-        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(imgray,y,255,0)
-        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        
-        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
- 
-        
-        st.image(thresh, use_column_width=True, clamp = True)
-        st.image(img, use_column_width=True, clamp = True)
-
-
 st.header("Exploration of Banks Panel Data")
 
 
@@ -295,45 +263,6 @@ st.bar_chart(acl_cov_rate_20Q4.groupby('BANK_NAME_ABBR').agg('mean')[['Total_ACL
 
 def visuals():
     st.header("Thresholding, Edge Detection and Contours")
-    
-    if st.button('See Original Image of Tom'):
-        
-        original = Image.open('tom.jpg')
-        st.image(original, use_column_width=True)
-        
-    image = cv2.imread('tom.jpg')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
-    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
-    thresh1 = thresh1.astype(np.float64)
-    st.image(thresh1, use_column_width=True,clamp = True)
-    
-    st.text("Bar Chart of the image")
-    histr = cv2.calcHist([image],[0],None,[256],[0,256])
-    st.bar_chart(histr)
-    
-    st.text("Press the button below to view Canny Edge Detection Technique") 
-    if st.button('Canny Edge Detector'): 
-        image = load_image("jerry.jpg")
-        edges = cv2.Canny(image,50,300)
-        cv2.imwrite('edges.jpg',edges)
-        st.image(edges,use_column_width=True,clamp=True)
-      
-    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
-    
-    if st.button('Contours'):
-        im = load_image("jerry1.jpg")
-          
-        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(imgray,y,255,0)
-        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        
-        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
- 
-        
-        st.image(thresh, use_column_width=True, clamp = True)
-        st.image(img, use_column_width=True, clamp = True)
 
 coverage_rates_states = pd.DataFrame(acl_cov_rate_20Q4[['latitude', 'longitude', 'Total_ACL_Coverage_Rate']])
 
@@ -485,46 +414,6 @@ pnc_macro_data['NCO_RATE_SEG'].head()
 
 def reganalyzer():
     st.header("Thresholding, Edge Detection and Contours")
-    
-    if st.button('See Original Image of Tom'):
-        
-        original = Image.open('tom.jpg')
-        st.image(original, use_column_width=True)
-        
-    image = cv2.imread('tom.jpg')
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-    x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
-    ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
-    thresh1 = thresh1.astype(np.float64)
-    st.image(thresh1, use_column_width=True,clamp = True)
-    
-    st.text("Bar Chart of the image")
-    histr = cv2.calcHist([image],[0],None,[256],[0,256])
-    st.bar_chart(histr)
-    
-    st.text("Press the button below to view Canny Edge Detection Technique") 
-    if st.button('Canny Edge Detector'): 
-        image = load_image("jerry.jpg")
-        edges = cv2.Canny(image,50,300)
-        cv2.imwrite('edges.jpg',edges)
-        st.image(edges,use_column_width=True,clamp=True)
-      
-    y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
-    
-    if st.button('Contours'):
-        im = load_image("jerry1.jpg")
-          
-        imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-        ret,thresh = cv2.threshold(imgray,y,255,0)
-        image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-        
-        img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
- 
-        
-        st.image(thresh, use_column_width=True, clamp = True)
-        st.image(img, use_column_width=True, clamp = True)
-
 
 
 

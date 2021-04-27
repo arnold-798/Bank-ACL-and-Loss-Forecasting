@@ -715,7 +715,7 @@ def reganalyzer():
     # Plot the training random forest
 
     from sklearn import tree
-    from dtreeviz.trees import dtreeviz # will be used for tree visualization
+    #from dtreeviz.trees import dtreeviz # will be used for tree visualization
     from matplotlib import pyplot as plt
     plt.rcParams.update({'figure.figsize': (12.0, 8.0)})
     plt.rcParams.update({'font.size': 14})

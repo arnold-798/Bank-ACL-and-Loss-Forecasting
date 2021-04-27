@@ -595,8 +595,8 @@ def reganalyzer():
 
     pnc_macro_train = pnc_macro_data.iloc[:84] 
     
-    st.subheader("Training Data Raw")
-    st.write(pnc_macro_train)
+    st.subheader("Training Data Raw Summary Statistics")
+    st.write(sum_stats(pnc_macro_train))
     
     # Build function to impute missing values
 

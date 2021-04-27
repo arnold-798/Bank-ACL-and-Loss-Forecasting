@@ -378,7 +378,7 @@ def visuals():
 
     pnc_macro_sum_stats = sum_stats(pnc_macro_data)
 
-    st.subheader("High Level Summary Statistics Raw Data")
+    st.subheader("High Level Summary Statistics Complete Raw Data")
     st.write(pd.DataFrame(pnc_macro_sum_stats))
 
 
@@ -447,6 +447,8 @@ def visuals():
 
     pnc_macro_data['NCO_RATE_SEG'].head()
     
+    st.bar_chart(pnc_macro_data['NCO_RATE_SEG'])
+    
     # Barplot
 
     pnc_macro_data_sort = pd.DataFrame(pnc_macro_data, index=pnc_macro_data['YEAR_QUARTER'])
@@ -488,13 +490,31 @@ def reganalyzer():
     
     coverage_rates_states = pd.DataFrame(acl_cov_rate_20Q4[['latitude', 'longitude', 'Total_ACL_Coverage_Rate']])
 
-    # Subset the data to include 5 peer Banks: PNC, KEY, MTB, USB, FITB
-
     #KEY = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'KEY'])
     
     PNC = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'PNC'])
+
+    #FITB = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'FIFTH THIRD'])
+
+    #MTB = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'M&T BANK'])
+
+    #USB = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'USB'])
+
+    #peer_group_raw_1 = pd.concat([KEY, PNC], axis=1)
+
+    #peer_group_raw_2 = pd.concat([FITB, MTB], axis=1)
+
+    #peer_group_raw_3 = pd.concat([peer_group_raw_1, USB], axis=1)
+
+    #peer_group_raw = pd.concat([peer_group_raw_3, peer_group_raw_2], axis=1)
+
+    #peer_group_raw = pd.DataFrame(peer_group_raw)
     
-    
+    #print(sum_stats(PNC))
+
+    #print(sum_stats(fred_qd_raw))
+
+
     # Subset the peer bank data to only the necessary variables
 
 
@@ -502,9 +522,10 @@ def reganalyzer():
 
     peer_bank_data = peer_bank_data.reset_index(drop=True)
 
-    macro_data = fred_qd_raw[['sasdate','GDPC1', 'DPIC96', 'LNS12032194', 'UNRATE', 'GDPCTPI', 'CPILFESL', 'FEDFUNDS']] 
+    macro_data = fred_qd_raw[['sasdate','GDPC1', 'DPIC96', 'LNS12032194', 'UNRATE', 'GDPCTPI', 'CPILFESL', 'FEDFUNDS']]
     
     pnc_macro_data = pd.concat([peer_bank_data, macro_data], axis=1)
+
     
     pnc_macro_data['NCO_RATE_SEG'] = pd.cut(pnc_macro_data['REG_NCO_TO_AVG_LOAN'], bins = 5, labels = ['Min', 'Low', 'Mid', 'High', "Max"])
 
@@ -563,8 +584,8 @@ def reganalyzer():
     
     st.header("Raw Data (PNC)")
     st.write(pnc_macro_data)
-    #st.header("Summary Statistics on Single Imputed Data)
-    #st.write(sum_stats(pnc_macro_data))
+    st.header("Summary Statistics for Raw Data")
+    st.write(sum_stats(pnc_macro_data))
     
 
     st.header("Create training and test data")

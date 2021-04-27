@@ -13,9 +13,7 @@ import streamlit as st
 
 st.title("""
          Peer Bank Analysis 
-         
-         ***Loss Forecasting Peer Banks***
-         
+                  
          ***Allowance For Credit Loss Forecasting***
          
          ***CECL Coverage Rates***
@@ -54,18 +52,17 @@ streamlit_app_path = 'https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-
 
 def welcome():
     
-    st.title('Welcome to an Example of a Streamlit Data Exploration App with Data from Bank Loss Forecasting Under CECL Methodology')
+    st.title("""
+             Welcome to an Example of a Streamlit Data Exploration App with Data from Bank Loss Forecasting Under CECL Methodology
+             
+             """)
     
     
-    
-    
-    st.subheader('A simple app that shows different image processing algorithms. You can choose the options'
+    st.subheader(""" This app walks through data exploration, visual analysis and a brief regression analysis that is presented by the app
                  
-             + ' from the left. I have implemented only a few to show how it works on Streamlit. ' + 
-             'You are free to add stuff to this app.')
+                 """)
     
-    
-    
+
     
     st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/CECL Graph Example.png',use_column_width=True)
 
@@ -98,48 +95,6 @@ def load_fredqd(nrows):
 #%% Tutorials
 
 def tutorial():
-    st.header("Thresholding, Edge Detection and Contours")
-    
-    if st.button('See Original Image of Tom'):
-        
-        
-        
-       original = Image.open('tom.jpg')
-       st.image(original, use_column_width=True)
-        
-    #image = cv2.imread('tom.jpg')
-    #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
-    #x = st.slider('Change Threshold value',min_value = 50,max_value = 255) 
-    #ret,thresh1 = cv2.threshold(image,x,255,cv2.THRESH_BINARY)
-    #thresh1 = thresh1.astype(np.float64)
-    #st.image(thresh1, use_column_width=True,clamp = True)
-    
-    #st.text("Bar Chart of the image")
-    #histr = cv2.calcHist([image],[0],None,[256],[0,256])
-    #st.bar_chart(histr)
-    
-    #st.text("Press the button below to view Canny Edge Detection Technique") 
-    #if st.button('Canny Edge Detector'): 
-    #    image = load_image("jerry.jpg")
-    #    edges = cv2.Canny(image,50,300)
-    #    cv2.imwrite('edges.jpg',edges)
-    #    st.image(edges,use_column_width=True,clamp=True)
-    #  
-    #y = st.slider('Change Value to increase or decrease contours',min_value = 50,max_value = 255)     
-    #
-    #if st.button('Contours'):
-    #    im = load_image("jerry1.jpg")
-          
-    #    imgray = cv2.cvtColor(im,cv2.COLOR_BGR2GRAY)
-    #    ret,thresh = cv2.threshold(imgray,y,255,0)
-    #    image, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    #    
-    #    img = cv2.drawContours(im, contours, -1, (0,255,0), 3)
- 
-        
-    #    st.image(thresh, use_column_width=True, clamp = True)
-    #    st.image(img, use_column_width=True, clamp = True)
     
     fred_qd_raw = load_fredqd(120) 
     peer_bank_raw = load_peer_data(2400) 
@@ -501,7 +456,7 @@ def visuals():
 
 
 def reganalyzer():
-    st.header("Regression Analysis with Streamlit")
+    st.title("Regression Analysis with Streamlit")
     
     fred_qd_raw = load_fredqd(120) 
     peer_bank_raw = load_peer_data(2400) 
@@ -535,18 +490,6 @@ def reganalyzer():
 
     # Subset the data to include 5 peer Banks: PNC, KEY, MTB, USB, FITB
 
-    st.title("""
-         
-             # PNC Loss Forecast Prediction
-             
-             *** Random Forest Classifier Model ***
-             
-             *** Simple Linear Model ***
-             
-             """)
-
-
-    st.header("Data Exploration")
     #KEY = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'KEY'])
     
     PNC = pd.DataFrame(peer_bank_raw[peer_bank_raw['BANK_NAME_ABBR'] == 'PNC'])
@@ -564,59 +507,6 @@ def reganalyzer():
     pnc_macro_data = pd.concat([peer_bank_data, macro_data], axis=1)
 
 
-    # Create training and test data
-
-    # take the first 70% of observations (120 obverstaions in the dataset)
-
-    pnc_macro_train = pnc_macro_data.iloc[:84] 
-    
-     # Build function to impute missing values
-
-    def single_imputation(mydata, impute_type='mean' or 'median', train_or_test = 'train' or 'test'):
-
-        if train_or_test == 'train':
-            num_mydata = pd.DataFrame(mydata).select_dtypes(include = np.number)
-    
-        if impute_type == 'mean':
-            imputed_data = num_mydata.apply(lambda x: x.fillna(x.mean()), axis = 0)
-        if impute_type == 'median':
-            imputed_data = num_mydata.apply(lambda x: x.fillna(x.median()), axis = 0)
-    
-        str_mydata = pd.DataFrame(mydata).select_dtypes(include = ['object'])
-    
-        str_mydata_v1 = str_mydata.apply(lambda x: x.fillna('Unknown'))
-
-        imputed_data_final = pd.concat([imputed_data, str_mydata_v1], axis = 1)
-    
-        col_mean = dict(num_mydata.mean())
-        col_median = dict(num_mydata.median())
-
-        if train_or_test == 'test' and impute_type == 'mean':
-          num_mydata1 = pd.DataFrame(mydata).select_dtypes(include = np.number)
-
-        imputed_data = num_mydata1.apply(lambda x: x.fillna(col_mean), axis = 0)
-        if train_or_test == 'test' and impute_type == 'median':
-            imputed_data = num_mydata1.apply(lambda x: x.fillna(col_median), axis = 0)
-
-        str_mydata_v1 = str_mydata.apply(lambda x: x.fillna('Unknown'))
-
-        #str_mydata_v2 = pd.DataFrame(mydata).select_dtypes(include = ['object'])
-    
-        imputed_data_final = pd.concat([imputed_data, str_mydata_v1], axis = 1)
-
-        return (imputed_data_final)
-
-
-    pnc_macro_train = single_imputation(pnc_macro_train)
-
-    pnc_macro_test = pnc_macro_data.iloc[85:115]
-
-    pnc_macro_test = single_imputation(pnc_macro_test)
-
-    pnc_macro_validation = pnc_macro_data.iloc[116:120]
-
-    pnc_macro_validation = single_imputation(pnc_macro_validation)
-    
     # High level summary statistics 
     def df_sum(mydata): 
         for i in mydata: 
@@ -668,6 +558,78 @@ def reganalyzer():
         agg_sumstats = pd.concat([toh_sum, agg_sumstats_v3], axis = 1)
         return (agg_sumstats) 
     
+    st.header("Raw Data (PNC)")
+    st.write(pnc_macro_data)
+    #st.header("Summary Statistics on Single Imputed Data)
+    #st.write(sum_stats(pnc_macro_data))
+    
+
+    st.hedaer("Create training and test data")
+    st.subheader("Split the data 70% training, 20% test, 10% validation, according to time")
+
+    # take the first 70% of observations (120 obverstaions in the dataset)
+
+    pnc_macro_train = pnc_macro_data.iloc[:84] 
+    
+    st.subheader("Training Data Raw")
+    st.write(pnc_macro_train)
+    
+    # Build function to impute missing values
+
+    def single_imputation(mydata, impute_type='mean' or 'median', train_or_test = 'train' or 'test'):
+
+        if train_or_test == 'train':
+            num_mydata = pd.DataFrame(mydata).select_dtypes(include = np.number)
+    
+        if impute_type == 'mean':
+            imputed_data = num_mydata.apply(lambda x: x.fillna(x.mean()), axis = 0)
+        if impute_type == 'median':
+            imputed_data = num_mydata.apply(lambda x: x.fillna(x.median()), axis = 0)
+    
+        str_mydata = pd.DataFrame(mydata).select_dtypes(include = ['object'])
+    
+        str_mydata_v1 = str_mydata.apply(lambda x: x.fillna('Unknown'))
+
+        imputed_data_final = pd.concat([imputed_data, str_mydata_v1], axis = 1)
+    
+        col_mean = dict(num_mydata.mean())
+        col_median = dict(num_mydata.median())
+
+        if train_or_test == 'test' and impute_type == 'mean':
+          num_mydata1 = pd.DataFrame(mydata).select_dtypes(include = np.number)
+
+        imputed_data = num_mydata1.apply(lambda x: x.fillna(col_mean), axis = 0)
+        if train_or_test == 'test' and impute_type == 'median':
+            imputed_data = num_mydata1.apply(lambda x: x.fillna(col_median), axis = 0)
+
+        str_mydata_v1 = str_mydata.apply(lambda x: x.fillna('Unknown'))
+
+        #str_mydata_v2 = pd.DataFrame(mydata).select_dtypes(include = ['object'])
+    
+        imputed_data_final = pd.concat([imputed_data, str_mydata_v1], axis = 1)
+
+        return (imputed_data_final)
+
+    
+    pnc_macro_train = single_imputation(pnc_macro_train)
+
+    pnc_macro_test = pnc_macro_data.iloc[85:115]
+
+    pnc_macro_test = single_imputation(pnc_macro_test)
+
+    pnc_macro_validation = pnc_macro_data.iloc[116:120]
+
+    pnc_macro_validation = single_imputation(pnc_macro_validation)
+    
+    st.subheader("Training Data Cleaned")
+    st.write(pnc_macro_train)
+    
+    st.subheader("Test Data Cleaned")
+    st.write(pnc_macro_test)
+    
+    st.subheader("Validation Data")
+    st.write(pnc_macro_validation)
+    
     st.subheader("Training Data Summary Statistics - Post Imputation")
     st.write(pd.DataFrame(sum_stats(pnc_macro_train)))
 
@@ -702,7 +664,8 @@ def reganalyzer():
 
     pnc_macro_validation_yd = pnc_macro_validation_yd.iloc[116:120] 
     
-    # Build a Random Forest Calsifier 
+    # Build a Random Forest Clasifier 
+    
     from sklearn.ensemble import RandomForestClassifier as RFC 
     
     Rand_Forest = RFC(n_estimators = 500, criterion = 'entropy', max_depth = 5, bootstrap=True)
@@ -723,7 +686,7 @@ def reganalyzer():
     
     rf_predictions = pd.concat([pnc_train_yd_pred, pnc_test_yd_pred, pnc_validation_yd_pred, pnc_macro_train_yd, pnc_macro_test_yd, pnc_macro_validation_yd], axis=1)
     
-    st.line_chart(rf_predictions)
+    st.bar_chart(rf_predictions)
 
     # Plot the training random forest
 
@@ -737,6 +700,10 @@ def reganalyzer():
     _ = tree.plot_tree(rand_forest_1.estimators_[0], feature_names=pnc_macro_train_x.columns, filled=True)
 
     pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[0], feature_names = pnc_macro_train_x.columns, filled=True)
+    plt.savefig('classifier_tree_plot.png')
+    
+    st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/classifier_tree_plot.png', )
+
 
     st.header("Random Forest Classifier - Tree Plot")
     #st.pyplot(pnc_train_treeplot)
@@ -756,12 +723,17 @@ def reganalyzer():
 
     # Create predictions for the random forest regressor 
 
-    pnc_train_rfr_yd_pred = rand_forest_reg1.predict(pnc_macro_train_x)
+    pnc_train_ols_yd_pred = rand_forest_reg1.predict(pnc_macro_train_x)
 
-    pnc_test_rfr_yd_pred = rand_forest_reg2.predict(pnc_macro_test_x)
+    pnc_test_ols_yd_pred = rand_forest_reg2.predict(pnc_macro_test_x)
 
-    pnc_validation_rfr_yd_pred = rand_forest_reg3.predict(pnc_macro_validation_x)
+    pnc_validation_ols_yd_pred = rand_forest_reg3.predict(pnc_macro_validation_x)
+    
+    train_analysis = pd.concat([pnc_macro_train_yc, pnc_train_ols_yd_pred])
 
+    test_analysis = pd.concat([pnc_macro_test_yc, pnc_test_ols_yd_pred])
+
+    validation_analysis = pd.concat([pnc_macro_validation_yc, pnc_validation_ols_yd_pred])
 
     # Plot the predicted values against the actual values for PNC
 

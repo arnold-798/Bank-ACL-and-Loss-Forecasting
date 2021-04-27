@@ -56,9 +56,16 @@ def welcome():
     
     st.title('Welcome to an Example of a Streamlit Data Exploration App with Data from Bank Loss Forecasting Under CECL Methodology')
     
+    
+    
+    
     st.subheader('A simple app that shows different image processing algorithms. You can choose the options'
+                 
              + ' from the left. I have implemented only a few to show how it works on Streamlit. ' + 
              'You are free to add stuff to this app.')
+    
+    
+    
     
     st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/CECL Graph Example.png',use_column_width=True)
 

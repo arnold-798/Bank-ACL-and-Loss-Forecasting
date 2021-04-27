@@ -597,8 +597,8 @@ def reganalyzer():
 
         if train_or_test == 'test' and impute_type == 'mean':
           num_mydata1 = pd.DataFrame(mydata).select_dtypes(include = np.number)
-
-        imputed_data = num_mydata1.apply(lambda x: x.fillna(col_mean), axis = 0)
+          imputed_data = num_mydata1.apply(lambda x: x.fillna(col_mean), axis = 0)
+       
         if train_or_test == 'test' and impute_type == 'median':
             imputed_data = num_mydata1.apply(lambda x: x.fillna(col_median), axis = 0)
 

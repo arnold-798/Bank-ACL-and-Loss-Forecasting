@@ -748,11 +748,11 @@ def reganalyzer():
 
     # Create predictions for the random forest regressor 
 
-    pnc_train_ols_yd_pred = rand_forest_reg1.predict(pnc_macro_train_x)
+    pnc_train_ols_yd_pred = pd.series(rand_forest_reg1.predict(pnc_macro_train_x))
 
-    pnc_test_ols_yd_pred = rand_forest_reg2.predict(pnc_macro_test_x)
+    pnc_test_ols_yd_pred = pd.series(rand_forest_reg2.predict(pnc_macro_test_x))
 
-    pnc_validation_ols_yd_pred = rand_forest_reg3.predict(pnc_macro_validation_x)
+    pnc_validation_ols_yd_pred = pd.series(rand_forest_reg3.predict(pnc_macro_validation_x))
     
     train_analysis = pd.concat([pnc_macro_train_yc, pnc_train_ols_yd_pred])
 

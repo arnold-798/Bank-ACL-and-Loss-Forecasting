@@ -44,7 +44,9 @@ import matplotlib.pyplot as plt
 
 #cwd = os.getcwd()
 
-os.chdir('/Users/chrisarnold/Desktop/Big_Data_Econometrics/PyEnvs/peer_bank/')
+streamlit_app_path = 'https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/'
+
+#os.chdir(streamlit_app_path)
 
 #os.chdir(cwd)
 
@@ -58,7 +60,7 @@ def welcome():
              + ' from the left. I have implemented only a few to show how it works on Streamlit. ' + 
              'You are free to add stuff to this app.')
     
-    st.image('/Users/chrisarnold/Desktop/Big_Data_Econometrics/PyEnvs/peer_bank/CECL Graph Example.png',use_column_width=True)
+    st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/CECL Graph Example.png',use_column_width=True)
 
 
 

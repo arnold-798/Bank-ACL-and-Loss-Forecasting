@@ -721,13 +721,12 @@ def reganalyzer():
     plt.rcParams.update({'font.size': 14})
 
     plt.figure(figsize=(20,20))
-    _ = tree.plot_tree(rand_forest_1.estimators_[0], feature_names=pnc_macro_train_x.columns, filled=True)
+    _ = tree.plot_tree(rand_forest_1.estimators_[5], feature_names=pnc_macro_train_x.columns, filled=True)
 
-    pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[0], feature_names = pnc_macro_train_x.columns, filled=True)
+    pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[5], feature_names = pnc_macro_train_x.columns, filled=True)
     
-    #plt.savefig('classifier_tree_plot.png')
-    
-    st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/classifier_tree_plot.png', )
+            
+    #st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/classifier_tree.png', )
 
 
     st.header("Random Forest Classifier - Tree Plot")
@@ -759,6 +758,14 @@ def reganalyzer():
     test_analysis = pd.concat([pnc_macro_test_yc, pnc_test_ols_yd_pred])
 
     validation_analysis = pd.concat([pnc_macro_validation_yc, pnc_validation_ols_yd_pred])
+    
+    
+    st.subheader("Training Prediction Analysis")
+    st.line_chart(train_analysis)    
+    
+    
+    st.subheader("Test Prediction Analysis")
+    st.line_chart(test_analysis)
 
     # Plot the predicted values against the actual values for PNC
 

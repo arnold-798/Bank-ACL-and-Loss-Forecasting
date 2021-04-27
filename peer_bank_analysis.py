@@ -52,7 +52,7 @@ streamlit_app_path = 'https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-
 
 def welcome():
     
-    st.title("""
+    st.header("""
              Welcome to an Example of a Streamlit Data Exploration App with Data from Bank Loss Forecasting Under CECL Methodology
              
              """)

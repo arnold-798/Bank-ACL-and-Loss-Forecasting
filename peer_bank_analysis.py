@@ -505,6 +505,9 @@ def reganalyzer():
     macro_data = fred_qd_raw[['sasdate','GDPC1', 'DPIC96', 'LNS12032194', 'UNRATE', 'GDPCTPI', 'CPILFESL', 'FEDFUNDS']] 
     
     pnc_macro_data = pd.concat([peer_bank_data, macro_data], axis=1)
+    
+    pnc_macro_data['NCO_RATE_SEG'] = pd.cut(pnc_macro_data['REG_NCO_TO_AVG_LOAN'], bins = 5, labels = ['Min', 'Low', 'Mid', 'High', "Max"])
+
 
 
     # High level summary statistics 
@@ -652,8 +655,6 @@ def reganalyzer():
 
     pnc_macro_test_yc = pnc_macro_test['REG_NCO_TO_AVG_LOAN']
     
-    pnc_macro_data['NCO_RATE_SEG'] = pd.cut(pnc_macro_data['REG_NCO_TO_AVG_LOAN'], bins = 5, labels = ['Min', 'Low', 'Mid', 'High', "Max"])
-
     pnc_macro_test_yd = pnc_macro_data['NCO_RATE_SEG']
 
     pnc_macro_test_yd = pnc_macro_test_yd.iloc[85:115]

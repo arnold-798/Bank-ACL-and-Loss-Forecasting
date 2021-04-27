@@ -759,13 +759,17 @@ def reganalyzer():
 
     validation_analysis = pd.concat([pnc_macro_validation_yc, pnc_validation_ols_yd_pred])
     
+    train_analysis_v1 = (train_analysis['pnc_train_ols_yd_pred'] - train_analysis['pnc_macro_train_yc'])
+    
+    test_analysis_v1 = (test_analysis['pnc_test_ols_yd_pred'] - test_analysis['pnc_macro_test_yc'])
+        
     
     st.subheader("Training Prediction Analysis")
-    st.line_chart(train_analysis)    
+    st.line_chart(train_analysis_v1)    
     
     
     st.subheader("Test Prediction Analysis")
-    st.line_chart(test_analysis)
+    st.line_chart(test_analysis_v1)
 
     # Plot the predicted values against the actual values for PNC
 

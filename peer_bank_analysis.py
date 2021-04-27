@@ -760,25 +760,25 @@ def reganalyzer():
 
     validation_analysis = pd.concat([pnc_macro_validation_yc, pnc_validation_ols_yd_pred])
     
-    train_analysis_v1 = (train_analysis['pnc_train_ols_yd_pred'] - train_analysis['pnc_macro_train_yc'])
+    #train_analysis_v1 = (train_analysis['pnc_train_ols_yd_pred'] - train_analysis['pnc_macro_train_yc'])
     
-    test_analysis_v1 = (test_analysis['pnc_test_ols_yd_pred'] - test_analysis['pnc_macro_test_yc'])
+    #test_analysis_v1 = (test_analysis['pnc_test_ols_yd_pred'] - test_analysis['pnc_macro_test_yc'])
     
 
-    train_analysis_v2 = pd.concat([train_analysis_v1, train_analysis], axis=1)
+    #train_analysis_v2 = pd.concat([train_analysis_v1, train_analysis], axis=1)
 
-    test_analysis_v2 = pd.concat([test_analysis_v1, test_analysis], axis=1) 
+    #test_analysis_v2 = pd.concat([test_analysis_v1, test_analysis], axis=1) 
 
-    test_analysis_v3 = test_analysis_v2[['test_analysis_v1']]      
+    #test_analysis_v3 = test_analysis_v2[['test_analysis_v1']]      
     
-    train_analysis_v3 = train_analysis_v2['train_analysis_v1']
+    #train_analysis_v3 = train_analysis_v2['train_analysis_v1']
     
     st.subheader("Training Prediction Analysis")
-    st.line_chart(train_analysis_v3)    
+    st.line_chart(train_analysis)    
     
     
     st.subheader("Test Prediction Analysis")
-    st.line_chart(test_analysis_v3)
+    st.line_chart(test_analysis)
 
     # Plot the predicted values against the actual values for PNC
 

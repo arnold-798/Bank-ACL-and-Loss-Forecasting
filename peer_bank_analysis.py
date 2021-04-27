@@ -564,7 +564,7 @@ def reganalyzer():
     #st.write(sum_stats(pnc_macro_data))
     
 
-    st.hedaer("Create training and test data")
+    st.header("Create training and test data")
     st.subheader("Split the data 70% training, 20% test, 10% validation, according to time")
 
     # take the first 70% of observations (120 obverstaions in the dataset)

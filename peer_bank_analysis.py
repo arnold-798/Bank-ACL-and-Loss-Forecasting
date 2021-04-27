@@ -708,9 +708,9 @@ def reganalyzer():
 
     pnc_validation_yd_pred = rand_forest_3.predict_proba(pnc_macro_validation_x)
     
-    rf_predictions = pd.concat([pnc_train_yd_pred, pnc_test_yd_pred, pnc_validation_yd_pred, pnc_macro_train_yd, pnc_macro_test_yd, pnc_macro_validation_yd], axis=1)
+    #rf_predictions = pd.concat([pnc_train_yd_pred, pnc_test_yd_pred, pnc_validation_yd_pred, pnc_macro_train_yd, pnc_macro_test_yd, pnc_macro_validation_yd], axis=1)
     
-    st.bar_chart(rf_predictions)
+    #st.bar_chart(rf_predictions)
 
     # Plot the training random forest
 

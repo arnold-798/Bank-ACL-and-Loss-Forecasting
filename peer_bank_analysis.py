@@ -526,7 +526,6 @@ def reganalyzer():
     
     pnc_macro_data = pd.concat([peer_bank_data, macro_data], axis=1)
 
-    
     pnc_macro_data['NCO_RATE_SEG'] = pd.cut(pnc_macro_data['REG_NCO_TO_AVG_LOAN'], bins = 5, labels = ['Min', 'Low', 'Mid', 'High', "Max"])
 
 
@@ -582,8 +581,9 @@ def reganalyzer():
         agg_sumstats = pd.concat([toh_sum, agg_sumstats_v3], axis = 1)
         return (agg_sumstats) 
     
-    st.header("Raw Data (PNC)")
-    st.write(pnc_macro_data)
+    #st.header("Raw Data (PNC)")
+    #st.write(pnc_macro_data)
+    
     st.header("Summary Statistics for Raw Data")
     st.write(sum_stats(pnc_macro_data))
     
@@ -724,7 +724,8 @@ def reganalyzer():
     _ = tree.plot_tree(rand_forest_1.estimators_[0], feature_names=pnc_macro_train_x.columns, filled=True)
 
     pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[0], feature_names = pnc_macro_train_x.columns, filled=True)
-    plt.savefig('classifier_tree_plot.png')
+    
+    #plt.savefig('classifier_tree_plot.png')
     
     st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/classifier_tree_plot.png', )
 

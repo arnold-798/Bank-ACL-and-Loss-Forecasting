@@ -726,10 +726,11 @@ def reganalyzer():
     pnc_train_treeplot = tree.plot_tree(rand_forest_1.estimators_[5], feature_names = pnc_macro_train_x.columns, filled=True)
     
             
-    st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/Example Tree.png')
 
 
     st.header("Random Forest Classifier - Tree Plot")
+    st.image('https://raw.githubusercontent.com/arnold-798/Bank-ACL-and-Loss-Forecasting/main/Example Tree.png')
+
     #st.pyplot(pnc_train_treeplot)
 
     # Build a Simple Linear Regression model
